@@ -6,12 +6,12 @@ import re
 
 FUNCTION_DECLARATION_PATTERN = r'^def .*\(.*\):$'
 
-def document(fn, docstring):
+def document(function_name, docstring):
     with open(__file__, 'r') as source_file:
         source_code = source_file.read().split('\n')
 
     definitions = [line for line in source_code if re.match(FUNCTION_DECLARATION_PATTERN, line)]
-    definition = [definition for definition in definitions if fn in definition]
+    definition = [definition for definition in definitions if function_name in definition]
     if not definition:
         return False
 
