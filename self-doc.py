@@ -4,10 +4,11 @@
 from selfdocumenter import document
 
 def self_documenting_sum(a, b):
-    """Sums up integers."""
+    document('"""Sums up integers."""')
 
     def foo(x, y):
-        """foooo"""
+        document('"""foooo"""')
+        return x - y
 
     foo(1,2)
     return a + b
