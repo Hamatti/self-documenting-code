@@ -9,8 +9,6 @@ def document(docstring):
     function_name = inspect.stack()[1][3]
     filename = inspect.stack()[1][1]
 
-    print(f'Documenting {function_name} in {filename}')
-
     with open(filename, 'r') as source_file:
         source_code = source_file.read().split('\n')
 
