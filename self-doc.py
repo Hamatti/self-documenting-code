@@ -19,7 +19,7 @@ def document(function_name, docstring):
     index = source_code.index(definition) + 1
 
     new_source = source_code[:]
-    if(source_code[index].startswith('    """')):
+    if source_code[index].startswith('    """'):
         return False
 
     new_source.insert(index, docstring)
