@@ -31,5 +31,9 @@ def document(docstring):
 
     new_source.insert(index, f'{indentation_level}{docstring}')
 
+    # Remove original document line
+    document_call_pattern = r'^\s*document\(\'' + docstring + '\'\)\s*$'
+    new_source = [line for line in new_source if not re.match(document_call_pattern, line)]
+
     with open(filename, 'w') as source_file:
         source_file.write('\n'.join(new_source))
