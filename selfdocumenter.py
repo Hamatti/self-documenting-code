@@ -1,11 +1,15 @@
 import inspect
 import re
 
-FUNCTION_DECLARATION_PATTERN = r'^def .*\(.*\):$'
+FUNCTION_DECLARATION_PATTERN = r'^(\s*)def .*\(.*\):\s*$'
+EXTRA_SPACES = 4 * ' '
+
 
 def document(docstring):
     function_name = inspect.stack()[1][3]
     filename = inspect.stack()[1][1]
+
+    print(f'Documenting {function_name} in {filename}')
 
     with open(filename, 'r') as source_file:
         source_code = source_file.read().split('\n')
@@ -16,13 +20,18 @@ def document(docstring):
         return False
 
     definition = definition[0]
+
+    indentation_level = f'{re.match(FUNCTION_DECLARATION_PATTERN, definition).groups()[0]}{EXTRA_SPACES}'
+
     index = source_code.index(definition) + 1
 
     new_source = source_code[:]
-    if source_code[index].startswith('    """'):
+
+    docstring_pattern = r'^\s*' + docstring + '\s*$'
+    if re.match(docstring_pattern,source_code[index]):
         return False
 
-    new_source.insert(index, f'    {docstring}')
+    new_source.insert(index, f'{indentation_level}{docstring}')
 
     with open(filename, 'w') as source_file:
         source_file.write('\n'.join(new_source))
