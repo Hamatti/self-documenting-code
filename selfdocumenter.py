@@ -25,11 +25,11 @@ def document(docstring):
 
     new_source = source_code[:]
 
-    docstring_pattern = r'^\s*' + docstring + '\s*$'
+    docstring_pattern = r'^\s*"""' + docstring + '"""\s*$'
     if re.match(docstring_pattern,source_code[index]):
         return False
 
-    new_source.insert(index, f'{indentation_level}{docstring}')
+    new_source.insert(index, f'{indentation_level}"""{docstring}"""')
 
     # Remove original document line
     document_call_pattern = r'^\s*document\(\'' + docstring + '\'\)\s*$'
