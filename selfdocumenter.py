@@ -6,34 +6,44 @@ EXTRA_SPACES = 4 * ' '
 
 
 def document(docstring):
-    function_name = inspect.stack()[1][3]
-    filename = inspect.stack()[1][1]
+    """Please note, never actually use this. This is part of a joke.
 
-    with open(filename, 'r') as source_file:
+    This function modifies the source code of the file that calls this function. It does two things to the source code:
+
+    1) It adds docstring with triple quotes as the first line in function body if docstring does not exist yet.
+    2) It removes the call to this function."""
+
+    # Reach into stack to see what the calling function is called and which file it is from
+    caller_function_name = inspect.stack()[1][3]
+    caller_filename = inspect.stack()[1][1]
+
+    with open(caller_filename, 'r') as source_file:
         source_code = source_file.read().split('\n')
 
-    definitions = [line for line in source_code if re.match(FUNCTION_DECLARATION_PATTERN, line)]
-    definition = [definition for definition in definitions if function_name in definition]
-    if not definition:
+    # Find the correct function definition that this function was called from in the source code
+    function_definitions = [line for line in source_code if re.match(FUNCTION_DECLARATION_PATTERN, line)]
+    try:
+        caller_function_definition = [definition for definition in function_definitions if caller_function_name in definition][0]
+    except IndexError:
         return False
 
-    definition = definition[0]
+    # Hardcoded indentation of 4 spaces is added (compared to the function definition line)
+    new_indentation_spaces = f'{re.match(FUNCTION_DECLARATION_PATTERN, caller_function_definition).groups()[0]}{EXTRA_SPACES}'
 
-    indentation_level = f'{re.match(FUNCTION_DECLARATION_PATTERN, definition).groups()[0]}{EXTRA_SPACES}'
+    # Find out the right position for docstring in source code
+    index = source_code.index(caller_function_definition) + 1
 
-    index = source_code.index(definition) + 1
-
-    new_source = source_code[:]
-
+    # See if docstring already exists and fail the function if it does
     docstring_pattern = r'^\s*"""' + docstring + '"""\s*$'
     if re.match(docstring_pattern,source_code[index]):
         return False
 
-    new_source.insert(index, f'{indentation_level}"""{docstring}"""')
+    # Add docstring to correct position with indentation
+    source_code.insert(index, f'{new_indentation_spaces}"""{docstring}"""')
 
-    # Remove original document line
+    # Remove original document line because it has filled its purpose
     document_call_pattern = r'^\s*document\(\'' + docstring + '\'\)\s*$'
-    new_source = [line for line in new_source if not re.match(document_call_pattern, line)]
+    source_code = [line for line in source_code if not re.match(document_call_pattern, line)]
 
-    with open(filename, 'w') as source_file:
-        source_file.write('\n'.join(new_source))
+    with open(caller_filename, 'w') as source_file:
+        source_file.write('\n'.join(source_code))
