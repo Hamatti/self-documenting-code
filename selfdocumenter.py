@@ -34,6 +34,7 @@ def document(docstring):
     index = source_code.index(caller_function_definition) + 1
 
     # See if docstring already exists and fail the function if it does
+    docstring = docstring.replace('"', r'\"')
     docstring_pattern = r'^\s*"""' + docstring + '"""\s*$'
     if re.match(docstring_pattern, source_code[index]):
         return False
@@ -47,3 +48,4 @@ def document(docstring):
 
     with open(caller_filename, 'w') as source_file:
         source_file.write('\n'.join(source_code))
+
