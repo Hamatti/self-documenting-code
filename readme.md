@@ -16,6 +16,8 @@ That **why** can never be inferred from the code itself because it holds no unde
 
 And more than that, the "good code is self-documenting" attitude is hurtful for beginners entering the industry. They will look at their code and expect the minimum requirement to be perfect code that can be understood by anyone simply by looking at it. With years of experience in the industry, I have very rarely seen that happen: software is complex and understanding how it works requires a lot more than just looking at a piece of code.
 
+It is also harmful because it implies that writing documentation makes you a bad developer. This drives people to learn bad patterns and ends up developers not writing documentation and not learning how to write good documentation.
+
 Documenting your work (by whatever means you choose) is a sign of strenght, not weakness. We write documentation so it's easier for others (including future ourselves) to understand, to reason and to modify code. Making that harder by not documenting your code is doing a disservice to anyone who's gonna work on the codebase later.
 
 ## How it works?
