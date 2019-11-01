@@ -35,7 +35,7 @@ def document(docstring):
 
     # See if docstring already exists and fail the function if it does
     docstring_pattern = r'^\s*"""' + docstring + '"""\s*$'
-    if re.match(docstring_pattern,source_code[index]):
+    if re.match(docstring_pattern, source_code[index]):
         return False
 
     # Add docstring to correct position with indentation
